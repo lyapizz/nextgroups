@@ -10,27 +10,57 @@ import com.lyapizz.cutshot.nextgroups.model.Team;
 import org.junit.jupiter.api.Test;
 
 class GroupsCreatorTest {
-    GroupsCreator groupsCreator = new GroupsCreator(4);
+    GroupsCreator groupsCreator4Teams = new GroupsCreator(4);
+    GroupsCreator groupsCreator6Teams = new GroupsCreator(6);
 
     @Test
-    void createGroups_8teams() {
+    void create2Groups_8teams() {
         List<Team> teams = createTeams(8);
 
-        List<Group> groups = groupsCreator.createGroups(teams);
+        List<Group> groups = groupsCreator4Teams.createGroups(teams);
         assertEquals(2, groups.size());
         // check first group
         assertEquals(8, groups.get(0).getTeams().get(0).getCommonRating());
         assertEquals(4, groups.get(0).getTeams().get(1).getRandomSeed());
         assertEquals(3, groups.get(0).getTeams().get(2).getRandomSeed());
         assertEquals(5, groups.get(0).getTeams().get(3).getCommonRating());
+    }
+
+    @Test
+    void create2Groups_12teams() {
+        List<Team> teams = createTeams(12);
+
+        List<Group> groups = groupsCreator6Teams.createGroups(teams);
+        assertEquals(2, groups.size());
+        // check first group
+        assertEquals(12, groups.get(0).getTeams().get(0).getCommonRating());
+        assertEquals(8, groups.get(0).getTeams().get(1).getRandomSeed());
+        assertEquals(7, groups.get(0).getTeams().get(2).getRandomSeed());
+        assertEquals(6, groups.get(0).getTeams().get(3).getRandomSeed());
+        assertEquals(5, groups.get(0).getTeams().get(4).getRandomSeed());
+        assertEquals(9, groups.get(0).getTeams().get(5).getCommonRating());
 
     }
 
     @Test
-    void createGroups_16teams() {
+    void create3Groups_12teams() {
+        List<Team> teams = createTeams(12);
+
+        List<Group> groups = groupsCreator4Teams.createGroups(teams);
+        assertEquals(3, groups.size());
+        // check first group
+        assertEquals(12, groups.get(0).getTeams().get(0).getCommonRating());
+        assertEquals(6, groups.get(0).getTeams().get(1).getRandomSeed());
+        assertEquals(5, groups.get(0).getTeams().get(2).getRandomSeed());
+        assertEquals(7, groups.get(0).getTeams().get(3).getCommonRating());
+
+    }
+
+    @Test
+    void create4Groups_16teams() {
         List<Team> teams = createTeams(16);
 
-        List<Group> groups = groupsCreator.createGroups(teams);
+        List<Group> groups = groupsCreator4Teams.createGroups(teams);
         assertEquals(4, groups.size());
         // check first group
         assertEquals(16, groups.get(0).getTeams().get(0).getCommonRating());
@@ -41,10 +71,10 @@ class GroupsCreatorTest {
     }
 
     @Test
-    void createGroups_24teams() {
+    void create6Groups_24teams() {
         List<Team> teams = createTeams(24);
 
-        List<Group> groups = groupsCreator.createGroups(teams);
+        List<Group> groups = groupsCreator4Teams.createGroups(teams);
         assertEquals(6, groups.size());
         // check first group
         assertEquals(24, groups.get(0).getTeams().get(0).getCommonRating());

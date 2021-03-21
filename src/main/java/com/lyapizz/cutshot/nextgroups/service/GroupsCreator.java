@@ -20,17 +20,20 @@ public class GroupsCreator {
     }
 
     public List<Group> createGroups(List<Team> teams) {
+
+        int numberOfGroups = teams.size() / teams_in_a_group;
+
         //1: sort by rating
         teams.sort(Comparator.comparingInt(team -> -team.getCommonRating()));
-        //2: find half with maximum rating:fixme 12 winter teams for two groups
+        //2: find half with maximum rating
         List<Team> topTeams = teams.stream()
-                .limit(teams.size() / 2)
+                .limit(numberOfGroups * 2)
                 .collect(Collectors.toList());
         //3: add them to groups
         List<Group> groups = initGroups(topTeams);
         //4: fill groups by random groups by seed
         List<Team> loserTeams = teams.stream()
-                .skip(teams.size() / 2)
+                .skip(numberOfGroups * 2)
                 .sorted(Comparator.comparingInt(team -> -team.getRandomSeed()))
                 .collect(Collectors.toList());
         return extendByRandomTeams(groups, loserTeams);
