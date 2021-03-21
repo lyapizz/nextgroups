@@ -25,7 +25,9 @@ public class NextGroupsService {
     @Value("${url}")
     private String link;
 
-    private static final String MYSELF = "lepexin";
+    @Value("${surname}")
+    private String surnameToFind;
+
     public static final String TOURNAMENT_PLAYERS_TABLE = "players_table_new";
 
     private final TournamentPlayCardsService tournamentPlayCardsService;
@@ -46,7 +48,7 @@ public class NextGroupsService {
 
         for (Element tableElement : doc.getElementsByClass(TOURNAMENT_PLAYERS_TABLE)) {
             TournamentPlayCards playCards = tournamentPlayCardsService.extract(tableElement);
-            if (playCards.containsPlayer(MYSELF)) {
+            if (playCards.containsPlayer(surnameToFind)) {
                 LOG.info("Tournament with you was found!");
                 List<Team> allTeams = teamsCreator.createTeams(playCards);
                 LOG.info("Teams were created!");
