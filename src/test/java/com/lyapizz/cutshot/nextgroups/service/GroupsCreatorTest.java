@@ -71,6 +71,20 @@ class GroupsCreatorTest {
     }
 
     @Test
+    void create4Groups_13teams_notEnoughTeams() {
+        List<Team> teams = createTeams(13);
+
+        List<Group> groups = groupsCreator4Teams.createGroups(teams);
+        assertEquals(4, groups.size());
+        // check first group
+        assertEquals(16, groups.get(0).getTeams().get(0).getCommonRating());
+        assertEquals(8, groups.get(0).getTeams().get(1).getRandomSeed());
+        assertEquals(7, groups.get(0).getTeams().get(2).getRandomSeed());
+        assertEquals(9, groups.get(0).getTeams().get(3).getCommonRating());
+
+    }
+
+    @Test
     void create6Groups_24teams() {
         List<Team> teams = createTeams(24);
 
