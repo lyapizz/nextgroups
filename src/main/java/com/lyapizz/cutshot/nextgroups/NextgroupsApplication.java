@@ -13,23 +13,6 @@ import org.springframework.context.annotation.Import;
 @Import(AppConfiguration.class)
 public class NextgroupsApplication {
 
-    private static final Logger LOG = LoggerFactory.getLogger(NextgroupsApplication.class);
-
-    private final NextGroupsService nextGroupsService;
-
-    public NextgroupsApplication(NextGroupsService nextGroupsService) {
-        this.nextGroupsService = nextGroupsService;
-    }
-
-    @Bean
-    public CommandLineRunner run() {
-        return args -> {
-            LOG.info("Starting CLR application");
-            nextGroupsService.printGroups();
-            LOG.info("Finishing CLR application");
-        };
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(NextgroupsApplication.class, args);
     }
