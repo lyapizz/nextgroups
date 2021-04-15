@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("api/nextGroups")
+@RequestMapping(value = "api/nextGroups", produces = "application/json;charset=UTF-8")
 public class NextGroupRestController {
 
     NextGroupsService nextGroupsService;
 
     @GetMapping
-    List<GroupResult> getNextGroups(@RequestParam(defaultValue = "https://cut-shot.ru/event/light-set#zayavki") String tournament,
+    List<GroupResult> getNextGroups(@RequestParam(defaultValue = "http://cut-shot.ru/event/strong-cup-4#zayavki") String tournament,
                                     @RequestParam(defaultValue = "petrachkov") String surname) throws IOException {
         return nextGroupsService.calculateGroups(tournament, surname);
     }

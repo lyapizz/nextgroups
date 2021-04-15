@@ -11,7 +11,7 @@ public class HttpUtils {
     public static Document readFromLink(String link) throws IOException {
         return Jsoup.connect(link)
                 .userAgent("Mozilla")
-                .timeout(3000)
+                .timeout(10000)
                 .post();
     }
 
