@@ -23,7 +23,7 @@ public class TeamsCreator {
     public List<Team> createTeams(TournamentPlayCards tournamentPlayCards) {
         List<Team> result = new ArrayList<>();
         long startTime = System.currentTimeMillis();
-        tournamentPlayCards.getTeamsPages().parallelStream().forEach(teamPage -> createTeam(result, teamPage));
+        tournamentPlayCards.getTeamsPages().forEach(teamPage -> createTeam(result, teamPage));
 
         log.info("Team creation took {} ms", System.currentTimeMillis() - startTime);
 

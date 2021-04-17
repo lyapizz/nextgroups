@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cut-shot | NextGroups</title>
+</head>
+<body>
+<table th:each="groupResult:${nextGroups}">
+    <thead>
+    <h3> Category: [[${groupResult.category}]]</h3>
+    <thead/>
+    <tbody>
+    <tr th:each="group:${groupResult.groups}">
+        <th>Group [[${group.id}]]</th>
+        <table th:each="team:${group.teams}">
+            <tbody>
+            <tr>
+                <td>[[${team.toString()}]]</td>
+            </tr>
+            <tbody/>
+        </table>
+        <br/>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
