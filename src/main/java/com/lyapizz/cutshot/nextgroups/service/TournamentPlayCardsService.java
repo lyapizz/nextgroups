@@ -32,7 +32,7 @@ public class TournamentPlayCardsService {
     private boolean isApproved(Element teamElement) {
         for(Element child : teamElement.children()){
             if(child.hasClass("players_table_new_n_approve")){
-                return child.text().equals("Подтверждено");
+                return child.text().equals("Подтверждено") || child.text().equals("WILD CARD");
             }
         }
         return false;

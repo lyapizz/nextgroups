@@ -7,26 +7,36 @@ import java.util.List;
 import com.lyapizz.cutshot.nextgroups.model.Team;
 import com.lyapizz.cutshot.nextgroups.model.TournamentPlayCards;
 import com.lyapizz.cutshot.nextgroups.service.document.DocumentReader;
-import com.lyapizz.cutshot.nextgroups.utils.HttpUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
+@Slf4j
 public class TeamsCreator {
 
     DocumentReader documentReader;
 
-    public List<Team> createTeams(TournamentPlayCards tournamentPlayCards) throws IOException {
+    public List<Team> createTeams(TournamentPlayCards tournamentPlayCards) {
         List<Team> result = new ArrayList<>();
-        for (String teamPage : tournamentPlayCards.getTeamsPages()) {
-            Team team = extractTeam(teamPage);
-            result.add(team);
-        }
+        long startTime = System.currentTimeMillis();
+        tournamentPlayCards.getTeamsPages().parallelStream().forEach(teamPage -> createTeam(result, teamPage));
+
+        log.info("Team creation took {} ms", System.currentTimeMillis() - startTime);
 
         return result;
+    }
+
+    private void createTeam(List<Team> result, String teamPage) {
+        try {
+            Team team = extractTeam(teamPage);
+            result.add(team);
+        } catch (IOException exception) {
+            log.error("Error during creation of team: {}", teamPage, exception);
+        }
     }
 
     private Team extractTeam(String teamPage) throws IOException {
@@ -37,7 +47,6 @@ public class TeamsCreator {
 
         return new Team(players.get(0), players.get(1), commonRating, randomSeed);
     }
-
 
 
     private List<String> findPlayers(Document document) {
@@ -53,18 +62,19 @@ public class TeamsCreator {
 
     private Integer findCommonRating(Document document) {
         for (Element playerElement : document.getElementsByClass("team_zayavka_cont_block2")) {
-            if(!playerElement.getElementsContainingText("Рейтинг").isEmpty()){
-                for(Element child: playerElement.getElementsByClass("team_zayavka_cont_medal2")){
+            if (!playerElement.getElementsContainingText("Рейтинг").isEmpty()) {
+                for (Element child : playerElement.getElementsByClass("team_zayavka_cont_medal2")) {
                     return Integer.parseInt(child.text());
                 }
             }
         }
         return null;
     }
+
     private Integer findRandomSeed(Document document) {
         for (Element playerElement : document.getElementsByClass("team_zayavka_cont_block2")) {
-            if(!playerElement.getElementsContainingText("Жеребъевка").isEmpty()){
-                for(Element child: playerElement.getElementsByClass("team_zayavka_cont_medal2")){
+            if (!playerElement.getElementsContainingText("Жеребъевка").isEmpty()) {
+                for (Element child : playerElement.getElementsByClass("team_zayavka_cont_medal2")) {
                     return Integer.parseInt(child.text());
                 }
             }
