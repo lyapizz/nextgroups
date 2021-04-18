@@ -21,7 +21,7 @@ public class GroupsCreator {
 
     public List<Group> createGroups(List<Team> teams) {
 
-        int numberOfGroups = teams.size() / teams_in_a_group;
+        int numberOfGroups = (int) Math.ceil(1.0 * teams.size() / teams_in_a_group);
 
         //1: sort by rating
         teams.sort(Comparator.comparingInt(team -> -team.getCommonRating()));

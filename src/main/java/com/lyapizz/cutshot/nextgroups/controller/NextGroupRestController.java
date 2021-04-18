@@ -19,8 +19,8 @@ public class NextGroupRestController {
     NextGroupsService nextGroupsService;
 
     @GetMapping
-    List<GroupResult> getNextGroups(@RequestParam(defaultValue = "http://cut-shot.ru/event/strong-cup-4#zayavki") String tournament,
-                                    @RequestParam(defaultValue = "petrachkov") String surname) throws IOException {
+    List<GroupResult> getNextGroups(@RequestParam(defaultValue = "https://cut-shot.ru/event/spring-cup-4#zayavki") String tournament,
+                                    @RequestParam(defaultValue = "lepexin") String surname) throws IOException {
         return nextGroupsService.calculateGroups(tournament, surname);
     }
 

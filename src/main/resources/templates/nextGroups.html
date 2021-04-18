@@ -3,25 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Cut-shot | NextGroups</title>
+    <link rel="stylesheet" href="css/site.css"/>
 </head>
 <body>
-<table th:each="groupResult:${nextGroups}">
-    <thead>
+<div th:each="groupResult:${nextGroups}">
     <h3> Category: [[${groupResult.category}]]</h3>
-    <thead/>
-    <tbody>
-    <tr th:each="group:${groupResult.groups}">
-        <th>Group [[${group.id}]]</th>
-        <table th:each="team:${group.teams}">
-            <tbody>
-            <tr>
-                <td>[[${team.toString()}]]</td>
-            </tr>
-            <tbody/>
-        </table>
+    <table th:each="group:${groupResult.groups}">
+        <th align="left">Group [[${group.id}]]</th>
+        <tr th:each="team:${group.teams}">
+            <td>[[${team.toString()}]]</td>
+        </tr>
         <br/>
-    </tr>
-    </tbody>
-</table>
+    </table>
+</div>
 </body>
 </html>

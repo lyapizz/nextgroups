@@ -18,8 +18,8 @@ public class NextGroupController {
     NextGroupsService nextGroupsService;
 
     @GetMapping
-    public String getNextGroups(Model model, @RequestParam(defaultValue = "http://cut-shot.ru/event/strong-cup-4#zayavki") String tournament,
-                                @RequestParam(defaultValue = "petrachkov") String surname) throws IOException {
+    public String getNextGroups(Model model, @RequestParam(defaultValue = "https://cut-shot.ru/event/spring-cup-4#zayavki") String tournament,
+                                @RequestParam(defaultValue = "lepexin") String surname) throws IOException {
         model.addAttribute("nextGroups", nextGroupsService.calculateGroups(tournament, surname));
         return "nextGroups";
     }

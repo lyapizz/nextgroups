@@ -1,7 +1,8 @@
 package com.lyapizz.cutshot.nextgroups.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.lyapizz.cutshot.nextgroups.model.Team;
@@ -22,7 +23,7 @@ class TeamsCreatorTest {
     }
 
     @Test
-    void createTeams_oneTeam_twoPlayers() throws Exception {
+    void createTeams_oneTeam_twoPlayers() {
         List<String> teamPages = List.of("/lepekhin-golosov.html");
         TournamentPlayCards tournamentPlayCards = new TournamentPlayCards(teamPages);
 
@@ -37,7 +38,20 @@ class TeamsCreatorTest {
     }
 
     @Test
-    void createTeams_oneTeam_SecondPlayerIsNull() throws Exception {
+    void createTeams_manyTeams_parallelStreamWorks() {
+        List<String> teamPages = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            teamPages.add("/lepekhin-golosov.html");
+        }
+        TournamentPlayCards tournamentPlayCards = new TournamentPlayCards(teamPages);
+
+        List<Team> teamList = teamsCreator.createTeams(tournamentPlayCards);
+
+        assertEquals(100, teamList.size());
+    }
+
+    @Test
+    void createTeams_oneTeam_SecondPlayerIsNull() {
         List<String> teamPages = List.of("/berezovskij.html");
         TournamentPlayCards tournamentPlayCards = new TournamentPlayCards(teamPages);
 

@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.lyapizz.cutshot.nextgroups.model.Group;
 import com.lyapizz.cutshot.nextgroups.model.Team;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class GroupsCreatorTest {
@@ -71,6 +72,7 @@ class GroupsCreatorTest {
     }
 
     @Test
+    @Disabled("not possible, because quota is not reached")
     void create4Groups_13teams_notEnoughTeams() {
         List<Team> teams = createTeams(13);
 

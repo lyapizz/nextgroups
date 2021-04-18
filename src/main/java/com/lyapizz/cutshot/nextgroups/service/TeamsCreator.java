@@ -2,6 +2,7 @@ package com.lyapizz.cutshot.nextgroups.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.lyapizz.cutshot.nextgroups.model.Team;
@@ -21,9 +22,10 @@ public class TeamsCreator {
     DocumentReader documentReader;
 
     public List<Team> createTeams(TournamentPlayCards tournamentPlayCards) {
-        List<Team> result = new ArrayList<>();
+        List<Team> result = Collections.synchronizedList(new ArrayList<>());
         long startTime = System.currentTimeMillis();
-        tournamentPlayCards.getTeamsPages().forEach(teamPage -> createTeam(result, teamPage));
+        //todo think about parallelism
+        tournamentPlayCards.getTeamsPages().parallelStream().forEach(teamPage -> createTeam(result, teamPage));
 
         log.info("Team creation took {} ms", System.currentTimeMillis() - startTime);
 
