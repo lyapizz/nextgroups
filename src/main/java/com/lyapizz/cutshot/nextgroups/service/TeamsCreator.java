@@ -47,7 +47,7 @@ public class TeamsCreator {
         Integer commonRating = findCommonRating(document);
         Integer randomSeed = findRandomSeed(document);
 
-        return new Team(players.get(0), players.get(1), commonRating, randomSeed);
+        return new Team(players.get(0), players.get(1), commonRating, randomSeed, teamPage);
     }
 
 

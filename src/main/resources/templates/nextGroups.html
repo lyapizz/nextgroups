@@ -18,7 +18,9 @@
     <table class="table table-striped table-hover" th:each="group:${groupResult.groups}">
         <th align="left">Group [[${group.id}]]</th>
         <tr th:each="team:${group.teams}">
-            <td>[[${team.toString()}]]</td>
+            <td>
+                <a href="somepage.html" th:href="@{|${team.teamPage}|}">[[${team.toString()}]]</a>
+            </td>
         </tr>
         <br/>
     </table>

@@ -106,7 +106,7 @@ class GroupsCreatorTest {
     private List<Team> createTeams(int size) {
         List<Team> result = new ArrayList<>();
         for (int i = 1; i <= size; i++) {
-            result.add(new Team("TEAM" + i + "_1", "TEAM" + i +"_2", i, i));
+            result.add(new Team("TEAM" + i + "_1", "TEAM" + i +"_2", i, i, "url"));
         }
         return result;
     }

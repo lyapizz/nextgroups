@@ -12,6 +12,8 @@ public class Team {
     Integer commonRating;
     @JsonIgnore
     Integer randomSeed;
+    @JsonIgnore
+    String teamPage;
 
     @Override
     public String toString() {
