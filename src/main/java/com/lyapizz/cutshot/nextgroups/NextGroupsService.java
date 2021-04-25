@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lyapizz.cutshot.nextgroups.model.Format;
 import com.lyapizz.cutshot.nextgroups.model.Group;
 import com.lyapizz.cutshot.nextgroups.model.GroupResult;
 import com.lyapizz.cutshot.nextgroups.model.Team;
@@ -46,7 +47,7 @@ public class NextGroupsService {
         this.categoryService = categoryService;
     }
 
-    public List<GroupResult> calculateGroups(String tournament, String surname) throws IOException {
+    public List<GroupResult> calculateGroups(String tournament, String surname, Format format) throws IOException {
         List<GroupResult> result = new ArrayList<>();
 
         Document doc = HttpUtils.readFromLink(tournament);
@@ -62,7 +63,7 @@ public class NextGroupsService {
                 LOG.info("Tournament with you was found!");
                 List<Team> allTeams = teamsCreator.createTeams(playCards);
                 LOG.info("Teams were created!");
-                List<Group> groups = groupsCreator.createGroups(allTeams);
+                List<Group> groups = groupsCreator.createGroups(allTeams, format);
                 LOG.info("Groups were created!");
                 result.add(new GroupResult(categories.get(i), groups));
                 for (Group group : groups) {

@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.lyapizz.cutshot.nextgroups.model.Format;
 import com.lyapizz.cutshot.nextgroups.model.Group;
 import com.lyapizz.cutshot.nextgroups.model.Team;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,15 +14,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class GroupsCreator {
 
-    private int teams_in_a_group;
+    public List<Group> createGroups(List<Team> teams, Format format) {
+        Format nonNullFormat = format != null ? format : Format.W_SINGLE_4;
 
-    public GroupsCreator(@Value("${players.in.groups}") int teams_in_a_group) {
-        this.teams_in_a_group = teams_in_a_group;
-    }
-
-    public List<Group> createGroups(List<Team> teams) {
-
-        int numberOfGroups = (int) Math.ceil(1.0 * teams.size() / teams_in_a_group);
+        int numberOfGroups = (int) Math.ceil(1.0 * teams.size() / nonNullFormat.getTeamsInGroup());
 
         //1: sort by rating
         teams.sort(Comparator.comparingInt(team -> -team.getCommonRating()));

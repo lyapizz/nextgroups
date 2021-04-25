@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.lyapizz.cutshot.nextgroups.NextGroupsService;
+import com.lyapizz.cutshot.nextgroups.model.Format;
 import com.lyapizz.cutshot.nextgroups.model.GroupResult;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +20,10 @@ public class NextGroupRestController {
     NextGroupsService nextGroupsService;
 
     @GetMapping
-    List<GroupResult> getNextGroups(@RequestParam(defaultValue = "https://cut-shot.ru/event/spring-cup-4#zayavki") String tournament,
-                                    @RequestParam(defaultValue = "lepexin") String surname) throws IOException {
-        return nextGroupsService.calculateGroups(tournament, surname);
+    List<GroupResult> getNextGroups(@RequestParam(defaultValue = "https://cut-shot.ru/event/lenin-grib") String tournament,
+                                    @RequestParam(defaultValue = "lepexin") String surname,
+                                    Format format) throws IOException {
+        return nextGroupsService.calculateGroups(tournament, surname, format);
     }
 
 }
