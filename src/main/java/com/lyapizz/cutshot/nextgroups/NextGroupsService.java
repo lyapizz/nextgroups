@@ -1,5 +1,8 @@
 package com.lyapizz.cutshot.nextgroups;
 
+import static com.lyapizz.cutshot.nextgroups.model.Problem.QUOTA_IS_NOT_REACHED;
+import static java.util.Collections.emptyList;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,15 +62,19 @@ public class NextGroupsService {
         Elements tournaments = doc.getElementsByClass(TOURNAMENT_PLAYERS_TABLE_CLASS_NAME);
         for (int i = 0; i < tournaments.size(); i++) {
             TournamentPlayCards playCards = tournamentPlayCardsService.extract(tournaments.get(i));
-            if (playCards.containsPlayer(surname) && playCards.quotaIsReached(quotes.get(i))) {
-                LOG.info("Tournament with you was found!");
-                List<Team> allTeams = teamsCreator.createTeams(playCards);
-                LOG.info("Teams were created!");
-                List<Group> groups = groupsCreator.createGroups(allTeams, format);
-                LOG.info("Groups were created!");
-                result.add(new GroupResult(categories.get(i), groups));
-                for (Group group : groups) {
-                    LOG.info(group.toString());
+            if (playCards.containsPlayer(surname)) {
+                if(playCards.quotaIsReached(quotes.get(i))){
+                    LOG.info("Tournament with you was found!");
+                    List<Team> allTeams = teamsCreator.createTeams(playCards);
+                    LOG.info("Teams were created!");
+                    List<Group> groups = groupsCreator.createGroups(allTeams, format);
+                    LOG.info("Groups were created!");
+                    result.add(new GroupResult(categories.get(i), groups, null));
+                    for (Group group : groups) {
+                        LOG.info(group.toString());
+                    }
+                }else{
+                    result.add(new GroupResult(categories.get(i), emptyList(), QUOTA_IS_NOT_REACHED.getMessage()));
                 }
             }
         }
