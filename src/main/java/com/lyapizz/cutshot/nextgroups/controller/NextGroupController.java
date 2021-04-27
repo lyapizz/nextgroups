@@ -20,7 +20,7 @@ public class NextGroupController {
 
     @GetMapping
     public String getNextGroups(Model model, @RequestParam(defaultValue = "https://cut-shot.ru/event/lenin-grib") String tournament,
-                                @RequestParam(defaultValue = "lepexin") String surname,
+                                @RequestParam(defaultValue = "") String surname,
                                 Format format) throws IOException {
         model.addAttribute("nextGroups", nextGroupsService.calculateGroups(tournament, surname, format));
         return "nextGroups";

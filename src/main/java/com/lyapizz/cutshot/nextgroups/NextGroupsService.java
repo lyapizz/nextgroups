@@ -63,7 +63,7 @@ public class NextGroupsService {
         for (int i = 0; i < tournaments.size(); i++) {
             TournamentPlayCards playCards = tournamentPlayCardsService.extract(tournaments.get(i));
             if (playCards.containsPlayer(surname)) {
-                if(playCards.quotaIsReached(quotes.get(i))){
+                if (playCards.quotaIsReached(quotes.get(i))) {
                     LOG.info("Tournament with you was found!");
                     List<Team> allTeams = teamsCreator.createTeams(playCards);
                     LOG.info("Teams were created!");
@@ -73,7 +73,7 @@ public class NextGroupsService {
                     for (Group group : groups) {
                         LOG.info(group.toString());
                     }
-                }else{
+                } else {
                     result.add(new GroupResult(categories.get(i), emptyList(), QUOTA_IS_NOT_REACHED.getMessage()));
                 }
             }
