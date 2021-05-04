@@ -7,6 +7,7 @@ import com.lyapizz.cutshot.nextgroups.NextGroupsService;
 import com.lyapizz.cutshot.nextgroups.model.Format;
 import com.lyapizz.cutshot.nextgroups.model.GroupResult;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +21,8 @@ public class NextGroupRestController {
     NextGroupsService nextGroupsService;
 
     @GetMapping
-    List<GroupResult> getNextGroups(@RequestParam(defaultValue = "https://cut-shot.ru/event/lenin-grib") String tournament,
+    @CrossOrigin(origins = "*")
+    List<GroupResult> getNextGroups(@RequestParam(defaultValue = "https://cut-shot.ru/event/elagin-start") String tournament,
                                     @RequestParam(defaultValue = "") String surname,
                                     Format format) throws IOException {
         return nextGroupsService.calculateGroups(tournament, surname, format);
