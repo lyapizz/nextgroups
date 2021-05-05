@@ -10,6 +10,7 @@ import java.util.List;
 import com.lyapizz.cutshot.nextgroups.model.Format;
 import com.lyapizz.cutshot.nextgroups.model.Group;
 import com.lyapizz.cutshot.nextgroups.model.GroupResult;
+import com.lyapizz.cutshot.nextgroups.model.GroupResultResponse;
 import com.lyapizz.cutshot.nextgroups.model.Team;
 import com.lyapizz.cutshot.nextgroups.model.TournamentPlayCards;
 import com.lyapizz.cutshot.nextgroups.service.CategoryService;
@@ -50,7 +51,7 @@ public class NextGroupsService {
         this.categoryService = categoryService;
     }
 
-    public List<GroupResult> calculateGroups(String tournament, String surname, Format format) throws IOException {
+    public GroupResultResponse calculateGroups(String tournament, String surname, Format format) throws IOException {
         List<GroupResult> result = new ArrayList<>();
 
         Document doc = HttpUtils.readFromLink(tournament);
@@ -78,7 +79,7 @@ public class NextGroupsService {
                 }
             }
         }
-        return result;
+        return new GroupResultResponse(doc.title(), result);
     }
 
 }
