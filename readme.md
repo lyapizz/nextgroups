@@ -2,4 +2,3 @@
 
 Technologies:
 Backend: Java + SpringBoot + JSoup
-Frontend: html + thymeleaf + bootstrap
