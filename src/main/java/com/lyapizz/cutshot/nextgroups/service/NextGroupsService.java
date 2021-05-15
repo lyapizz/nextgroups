@@ -1,4 +1,4 @@
-package com.lyapizz.cutshot.nextgroups;
+package com.lyapizz.cutshot.nextgroups.service;
 
 import static com.lyapizz.cutshot.nextgroups.model.Problem.QUOTA_IS_NOT_REACHED;
 import static java.util.Collections.emptyList;
@@ -10,14 +10,9 @@ import java.util.List;
 import com.lyapizz.cutshot.nextgroups.model.Format;
 import com.lyapizz.cutshot.nextgroups.model.Group;
 import com.lyapizz.cutshot.nextgroups.model.GroupResult;
-import com.lyapizz.cutshot.nextgroups.model.GroupResultResponse;
+import com.lyapizz.cutshot.nextgroups.model.response.GroupResultResponse;
 import com.lyapizz.cutshot.nextgroups.model.Team;
 import com.lyapizz.cutshot.nextgroups.model.TournamentPlayCards;
-import com.lyapizz.cutshot.nextgroups.service.CategoryService;
-import com.lyapizz.cutshot.nextgroups.service.GroupsCreator;
-import com.lyapizz.cutshot.nextgroups.service.QuotaService;
-import com.lyapizz.cutshot.nextgroups.service.TeamsCreator;
-import com.lyapizz.cutshot.nextgroups.service.TournamentPlayCardsService;
 import com.lyapizz.cutshot.nextgroups.utils.HttpUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;

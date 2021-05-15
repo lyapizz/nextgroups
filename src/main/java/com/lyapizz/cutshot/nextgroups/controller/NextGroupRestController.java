@@ -1,12 +1,10 @@
 package com.lyapizz.cutshot.nextgroups.controller;
 
 import java.io.IOException;
-import java.util.List;
 
-import com.lyapizz.cutshot.nextgroups.NextGroupsService;
+import com.lyapizz.cutshot.nextgroups.service.NextGroupsService;
 import com.lyapizz.cutshot.nextgroups.model.Format;
-import com.lyapizz.cutshot.nextgroups.model.GroupResult;
-import com.lyapizz.cutshot.nextgroups.model.GroupResultResponse;
+import com.lyapizz.cutshot.nextgroups.model.response.GroupResultResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
