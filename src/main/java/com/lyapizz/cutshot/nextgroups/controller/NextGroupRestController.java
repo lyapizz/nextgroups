@@ -22,7 +22,7 @@ public class NextGroupRestController {
 
     @GetMapping
     @CrossOrigin(origins = "*")
-    GroupResultResponse getNextGroups(@RequestParam(defaultValue = "https://cut-shot.ru/event/elagin-start") String tournament,
+    GroupResultResponse getNextGroups(@RequestParam(defaultValue = "https://cut-shot.ru/event/fox-beach-start-3") String tournament,
                                     @RequestParam(defaultValue = "") String surname,
                                     Format format) throws IOException {
         return nextGroupsService.calculateGroups(tournament, surname, format);
