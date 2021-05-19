@@ -72,7 +72,7 @@
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>1.6</version>
                 <configuration>
-                    <workingDirectory>../nextgroups-frontend-react</workingDirectory>
+                    <workingDirectory>nextgroups-frontend-react</workingDirectory>
                     <installDirectory>target</installDirectory>
                 </configuration>
                 <executions>
@@ -114,7 +114,7 @@
                         <configuration>
                             <target>
                                 <copy todir="${project.build.directory}/classes/public">
-                                    <fileset dir="${project.basedir}/../nextgroups-frontend-react/build"/>
+                                    <fileset dir="${project.basedir}/nextgroups-frontend-react/build"/>
                                 </copy>
                             </target>
                         </configuration>
