@@ -1,0 +1,39 @@
+{
+  "tournaments": [
+    {
+      "id": 0,
+      "name": "FOX BEACH OPEN",
+      "categories": "Men Hard , Women Open, Mixt Advanced",
+      "url": "https://cut-shot.ru/event/fox-beach-open-5",
+      "date": "15.05.2021"
+    },
+    {
+      "id": 1,
+      "name": "FOX BEACH START",
+      "categories": "Юноши 2007-2008, Men Medium & Light, Women Medium, Light & Next, Mixt Open & Light",
+      "url": "https://cut-shot.ru/event/fox-beach-start-3",
+      "date": "22-23.05.2021"
+    },
+    {
+      "id": 2,
+      "name": "MAY DAY",
+      "categories": "Men Advanced, Light & Next, Women Advanced, Light & Next, Mixt Open Medium, Light & Next",
+      "url": "https://cut-shot.ru/event/may-day-2",
+      "date": "29-30.05.2021"
+    },
+    {
+      "id": 3,
+      "name": "YUNE SLAM",
+      "categories": "Ветераны, Men Hard, Women Open, Men Light, Women Light & Next, Mixt Light",
+      "url": "https://cut-shot.ru/event/yune-slam",
+      "date": "05-06.06.2021"
+    },
+    {
+      "id": 4,
+      "name": "SUMMER CHALLENGE",
+      "categories": "Mixt Open, Medium, Light & Next, Men Medium & Light, Women Medium & Light",
+      "url": "https://cut-shot.ru/event/summer-challenge-4",
+      "date": "12-13.06.2021"
+    }
+  ]
+}

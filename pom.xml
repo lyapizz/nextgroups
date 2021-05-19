@@ -114,7 +114,7 @@
                         <configuration>
                             <target>
                                 <copy todir="${project.build.directory}/classes/public">
-                                    <fileset dir="nextgroups-frontend-react/build"/>
+                                    <fileset dir="${project.basedir}/nextgroups-frontend-react/build"/>
                                 </copy>
                             </target>
                         </configuration>
