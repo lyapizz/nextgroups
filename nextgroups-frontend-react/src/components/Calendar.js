@@ -1,16 +1,22 @@
 import appointmentList from "../data.json";
+import moment from 'moment';
 
 const Calendar = ({onTournamentChosen}) => {
     return (
         <div>
             <h3 className="mb-3">Saint-Petersburg Beach Volley Tour 2021</h3>
             {appointmentList.tournaments
-                .map((appointment) => (
-                    <a href="#" className="card" key={'tournament_' + appointment.id} onClick={() => onTournamentChosen(appointment.url)}>
+                .filter((tournament) => {
+                    let arrayOfStrings = tournament.date.split('-');
+                    let parsedDate = arrayOfStrings[arrayOfStrings.length - 1];
+                    return new Date() <= moment(parsedDate, "DD.MM.YYYY").toDate()
+                })
+                .map((tournament) => (
+                    <a href="#" className="card" key={'tournament_' + tournament.id} onClick={() => onTournamentChosen(tournament.url)}>
                         <div className="card-body">
-                            <h5 className="card-title">{appointment.name}</h5>
-                            <p className="card-text">{appointment.categories}</p>
-                            <p className="card-text">{appointment.date}</p>
+                            <h5 className="card-title">{tournament.name}</h5>
+                            <p className="card-text">{tournament.categories}</p>
+                            <p className="card-text">{tournament.date}</p>
                         </div>
                     </a>
                 ))
