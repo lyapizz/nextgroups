@@ -3,7 +3,7 @@ import appointmentList from "../data.json";
 const Calendar = ({onTournamentChosen}) => {
     return (
         <div>
-            <h3 className="mb-3">Saint-Petersburg Beach Volley Tour 2022</h3>
+            <h3 className="mb-3">Saint-Petersburg Beach Volley Tour 2021</h3>
             {appointmentList.tournaments
                 .map((appointment) => (
                     <a href="#" className="card" key={'tournament_' + appointment.id} onClick={() => onTournamentChosen(appointment.url)}>
