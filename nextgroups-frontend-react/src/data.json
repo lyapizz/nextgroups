@@ -17,7 +17,7 @@
     {
       "id": 2,
       "name": "MAY DAY",
-      "categories": "Men Advanced, Light & Next, Women Advanced, Light & Next, Mixt Open Medium, Light & Next",
+      "categories": "Men Advanced & Light, Women Advanced & Light, Mixt Open, Medium, Light & Next",
       "url": "https://cut-shot.ru/event/may-day-2",
       "date": "29-30.05.2021"
     },
@@ -31,9 +31,30 @@
     {
       "id": 4,
       "name": "SUMMER CHALLENGE",
-      "categories": "Mixt Open, Medium, Light & Next, Men Medium & Light, Women Medium & Light",
+      "categories": "Mixt Open, Medium, Light & Next, Men Medium & Light, Women Medium, Light & Next",
       "url": "https://cut-shot.ru/event/summer-challenge-4",
-      "date": "12-13.06.2021"
+      "date": "12-14.06.2021"
+    },
+    {
+      "id": 5,
+      "name": "DREAM CUP",
+      "categories": "Men Open, Medium & Light, Women Open, Light & Next, Mixt Advanced, Light & Next",
+      "url": "https://cut-shot.ru/event/dream-cup-3",
+      "date": "19-20.06.2021"
+    },
+    {
+      "id": 6,
+      "name": "FANTASY MASTERS",
+      "categories": "Men Open, Medium & Light, Women Open, Medium & Light, Mixt Open & Light",
+      "url": "https://cut-shot.ru/event/fantasy-masters-4",
+      "date": "26-27.06.2021"
+    },
+    {
+      "id": 7,
+      "name": "LIGHT SLAM",
+      "categories": "Юноши 2007-2010, Девушки 2007-2008, Women Light & Next, Men Light, Mixt Light & Next",
+      "url": "https://cut-shot.ru/event/light-slam",
+      "date": "03-04.07.2021"
     }
   ]
 }
