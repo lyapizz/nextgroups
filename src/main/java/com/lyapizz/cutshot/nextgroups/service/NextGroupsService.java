@@ -57,6 +57,10 @@ public class NextGroupsService {
 
         Elements tournaments = doc.getElementsByClass(TOURNAMENT_PLAYERS_TABLE_CLASS_NAME);
         for (int i = 0; i < tournaments.size(); i++) {
+            // skip "tsar of the mountain" tournament
+            if(categories.get(i).contains("ЦАРЬ ГОРЫ")){
+                continue;
+            }
             TournamentPlayCards playCards = tournamentPlayCardsService.extract(tournaments.get(i));
             if (playCards.containsPlayer(surname)) {
                 if (playCards.quotaIsReached(quotes.get(i))) {

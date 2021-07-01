@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "internal/calender", produces = "application/json;charset=UTF-8")
+@RequestMapping(value = "api/calender", produces = "application/json;charset=UTF-8")
 
 public class CalenderRestController {
 
