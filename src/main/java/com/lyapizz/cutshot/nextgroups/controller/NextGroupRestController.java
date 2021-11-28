@@ -6,6 +6,7 @@ import com.lyapizz.cutshot.nextgroups.service.NextGroupsService;
 import com.lyapizz.cutshot.nextgroups.model.Format;
 import com.lyapizz.cutshot.nextgroups.model.response.GroupResultResponse;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "api/nextGroups", produces = "application/json;charset=UTF-8")
-
 public class NextGroupRestController {
 
     NextGroupsService nextGroupsService;

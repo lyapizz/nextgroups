@@ -11,10 +11,12 @@ public class TournamentPlayCards {
 
     private static final Logger LOG = LoggerFactory.getLogger(TournamentPlayCards.class);
 
-    List<String> teamsPages;
+    List<TeamPage> teamsPages;
 
     public boolean containsPlayer(String surname) {
-        return teamsPages.stream().anyMatch(s -> s.contains(surname));
+        return teamsPages.stream()
+                .map(teamPage -> teamPage.url)
+                .anyMatch(s -> s.contains(surname));
     }
 
     public boolean quotaIsReached(Integer quota) {
@@ -24,4 +26,11 @@ public class TournamentPlayCards {
         }
         return isReached;
     }
+
+    @Value
+    public static class TeamPage {
+        String url;
+        Integer commonRating;
+    }
+
 }

@@ -1,12 +1,15 @@
 package com.lyapizz.cutshot.nextgroups.service;
 
 import static com.lyapizz.cutshot.nextgroups.model.Problem.QUOTA_IS_NOT_REACHED;
+import static com.lyapizz.cutshot.nextgroups.model.Problem.RANDOM_SEED_IS_NOT_DEFINED;
 import static java.util.Collections.emptyList;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.lyapizz.cutshot.nextgroups.NoRandomSeedException;
 import com.lyapizz.cutshot.nextgroups.model.Format;
 import com.lyapizz.cutshot.nextgroups.model.Group;
 import com.lyapizz.cutshot.nextgroups.model.GroupResult;
@@ -15,6 +18,7 @@ import com.lyapizz.cutshot.nextgroups.model.Team;
 import com.lyapizz.cutshot.nextgroups.model.TournamentPlayCards;
 import com.lyapizz.cutshot.nextgroups.utils.HttpUtils;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +59,10 @@ public class NextGroupsService {
         List<Integer> quotes = quotaService.findQuotes(doc);
         List<String> categories = categoryService.findCategories(doc);
 
-        Elements tournaments = doc.getElementsByClass(TOURNAMENT_PLAYERS_TABLE_CLASS_NAME);
+        List<Element> tournaments = doc.getElementsByClass(TOURNAMENT_PLAYERS_TABLE_CLASS_NAME)
+                .stream()
+                .filter(this::isPlannedTournament)
+                .collect(Collectors.toList());
         for (int i = 0; i < tournaments.size(); i++) {
             // skip "tsar of the mountain" tournament
             if(categories.get(i).contains("ЦАРЬ ГОРЫ")){
@@ -65,13 +72,17 @@ public class NextGroupsService {
             if (playCards.containsPlayer(surname)) {
                 if (playCards.quotaIsReached(quotes.get(i))) {
                     LOG.info("Tournament with you was found!");
-                    List<Team> allTeams = teamsCreator.createTeams(playCards);
-                    LOG.info("Teams were created!");
-                    List<Group> groups = groupsCreator.createGroups(allTeams, format);
-                    LOG.info("Groups were created!");
-                    result.add(new GroupResult(categories.get(i), groups, null));
-                    for (Group group : groups) {
-                        LOG.info(group.toString());
+                    try {
+                        List<Team> allTeams = teamsCreator.createTeams(playCards);
+                        LOG.info("Teams were created!");
+                        List<Group> groups = groupsCreator.createGroups(allTeams, format);
+                        LOG.info("Groups were created!");
+                        result.add(new GroupResult(categories.get(i), groups, null));
+                        for (Group group : groups) {
+                            LOG.info(group.toString());
+                        }
+                    } catch (NoRandomSeedException ex){
+                        result.add(new GroupResult(categories.get(i), emptyList(), RANDOM_SEED_IS_NOT_DEFINED.getMessage()));
                     }
                 } else {
                     result.add(new GroupResult(categories.get(i), emptyList(), QUOTA_IS_NOT_REACHED.getMessage()));
@@ -79,6 +90,11 @@ public class NextGroupsService {
             }
         }
         return new GroupResultResponse(doc.title(), result);
+    }
+
+    // filter tournaments with results
+    private boolean isPlannedTournament(Element element) {
+        return !element.getElementsByClass("players_table_new_n_approve").isEmpty();
     }
 
 }

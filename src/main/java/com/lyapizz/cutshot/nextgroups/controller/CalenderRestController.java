@@ -6,6 +6,7 @@ import com.lyapizz.cutshot.nextgroups.model.Tournament;
 import com.lyapizz.cutshot.nextgroups.model.response.CalenderResponse;
 import com.lyapizz.cutshot.nextgroups.service.CalenderService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "api/calender", produces = "application/json;charset=UTF-8")
-
 public class CalenderRestController {
 
     CalenderService calenderService;
