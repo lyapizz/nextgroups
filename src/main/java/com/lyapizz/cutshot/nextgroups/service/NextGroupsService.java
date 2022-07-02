@@ -6,16 +6,18 @@ import static java.util.Collections.emptyList;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.lyapizz.cutshot.nextgroups.NoRandomSeedException;
 import com.lyapizz.cutshot.nextgroups.model.Format;
 import com.lyapizz.cutshot.nextgroups.model.Group;
 import com.lyapizz.cutshot.nextgroups.model.GroupResult;
-import com.lyapizz.cutshot.nextgroups.model.response.GroupResultResponse;
 import com.lyapizz.cutshot.nextgroups.model.Team;
 import com.lyapizz.cutshot.nextgroups.model.TournamentPlayCards;
+import com.lyapizz.cutshot.nextgroups.model.response.GroupResultResponse;
 import com.lyapizz.cutshot.nextgroups.utils.HttpUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -50,46 +52,63 @@ public class NextGroupsService {
         this.categoryService = categoryService;
     }
 
-    public GroupResultResponse calculateGroups(String tournament, String surname, Format format) throws IOException {
+    public GroupResultResponse calculateGroups(String tournament, Format format) throws IOException {
         List<GroupResult> result = new ArrayList<>();
 
         Document doc = HttpUtils.readFromLink(tournament);
         LOG.info(doc.title());
 
-        List<Integer> quotes = quotaService.findQuotes(doc);
-        List<String> categories = categoryService.findCategories(doc);
+        Map<Integer, Integer> quoteMap = quotaService.findQuotes(doc);
+        Map<Integer, String> categoryMap = categoryService.findCategories(doc);
+        Map<Integer, Element> tournamentMap = createTournamentMap(doc);
 
-        List<Element> tournaments = doc.getElementsByClass(TOURNAMENT_PLAYERS_TABLE_CLASS_NAME)
-                .stream()
-                .filter(this::isPlannedTournament)
-                .collect(Collectors.toList());
-        for (int i = 0; i < tournaments.size(); i++) {
-            // skip "tsar of the mountain" tournament
-            if(categories.get(i).contains("ЦАРЬ ГОРЫ")){
-                continue;
-            }
-            TournamentPlayCards playCards = tournamentPlayCardsService.extract(tournaments.get(i));
-            if (playCards.containsPlayer(surname)) {
-                if (playCards.quotaIsReached(quotes.get(i))) {
-                    LOG.info("Tournament with you was found!");
-                    try {
-                        List<Team> allTeams = teamsCreator.createTeams(playCards);
-                        LOG.info("Teams were created!");
-                        List<Group> groups = groupsCreator.createGroups(allTeams, format);
-                        LOG.info("Groups were created!");
-                        result.add(new GroupResult(categories.get(i), groups, null));
-                        for (Group group : groups) {
-                            LOG.info(group.toString());
-                        }
-                    } catch (NoRandomSeedException ex){
-                        result.add(new GroupResult(categories.get(i), emptyList(), RANDOM_SEED_IS_NOT_DEFINED.getMessage()));
+        tournamentMap.entrySet()
+                .forEach(tournamentEntry -> {
+                    Integer quota = quoteMap.get(tournamentEntry.getKey());
+                    String category = categoryMap.get(tournamentEntry.getKey());
+
+                    GroupResult groupResult = processOneTournament(format, quota, category, tournamentEntry);
+                    if(groupResult != null) {
+                        result.add(groupResult);
                     }
-                } else {
-                    result.add(new GroupResult(categories.get(i), emptyList(), QUOTA_IS_NOT_REACHED.getMessage()));
-                }
+                });
+        return new GroupResultResponse(doc.title(), result);
+    }
+
+    private Map<Integer, Element> createTournamentMap(Document doc) {
+        Map<Integer, Element> tournamentMap = new HashMap<>();
+        Elements tornamentElements = doc.getElementsByClass(TOURNAMENT_PLAYERS_TABLE_CLASS_NAME);
+        for(int i=0; i< tornamentElements.size(); i++){
+            Element tournament = tornamentElements.get(i);
+            if(isPlannedTournament(tournament)){
+                tournamentMap.put(i, tournament);
             }
         }
-        return new GroupResultResponse(doc.title(), result);
+        return tournamentMap;
+    }
+
+    private GroupResult processOneTournament(Format format, Integer quota, String category, Entry<Integer, Element> tournamentEntry) {
+        // skip "tsar of the mountain" tournament
+        if (category.contains("ЦАРЬ ГОРЫ")) {
+            return null;
+        }
+        TournamentPlayCards playCards = tournamentPlayCardsService.extract(tournamentEntry.getValue());
+        if (playCards.quotaIsReached(quota)) {
+            try {
+                List<Team> allTeams = teamsCreator.createTeams(playCards);
+                LOG.info("Teams were created!");
+                List<Group> groups = groupsCreator.createGroups(allTeams, format);
+                LOG.info("Groups were created!");
+                for (Group group : groups) {
+                    LOG.info(group.toString());
+                }
+                return new GroupResult(category, groups, null);
+            } catch (NoRandomSeedException ex) {
+                return new GroupResult(category, emptyList(), RANDOM_SEED_IS_NOT_DEFINED.getMessage());
+            }
+        } else {
+            return new GroupResult(category, emptyList(), QUOTA_IS_NOT_REACHED.getMessage());
+        }
     }
 
     // filter tournaments with results

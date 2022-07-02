@@ -27,7 +27,7 @@ class TeamsCreatorTest {
 
     @Test
     void createTeams_oneTeam_twoPlayers() {
-        List<TeamPage> teamPages = List.of(new TeamPage("/lepekhin-golosov.html", 675));
+        List<TeamPage> teamPages = List.of(new TeamPage("/lepekhin-golosov.html", 675, 4));
         TournamentPlayCards tournamentPlayCards = new TournamentPlayCards(teamPages);
 
         List<Team> teamList = teamsCreator.createTeams(tournamentPlayCards);
@@ -44,7 +44,7 @@ class TeamsCreatorTest {
     void createTeams_manyTeams_parallelStreamWorks() {
         List<TeamPage> teamPages = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
-            teamPages.add(new TeamPage("/lepekhin-golosov.html", 675));
+            teamPages.add(new TeamPage("/lepekhin-golosov.html", 675, 4));
         }
         TournamentPlayCards tournamentPlayCards = new TournamentPlayCards(teamPages);
 
@@ -55,7 +55,7 @@ class TeamsCreatorTest {
 
     @Test
     void createTeams_oneTeam_SecondPlayerIsNull() {
-        List<TeamPage> teamPages = List.of(new TeamPage("/berezovskij.html", 105));
+        List<TeamPage> teamPages = List.of(new TeamPage("/berezovskij.html", 105, 4));
         TournamentPlayCards tournamentPlayCards = new TournamentPlayCards(teamPages);
 
         List<Team> teamList = teamsCreator.createTeams(tournamentPlayCards);
@@ -70,7 +70,7 @@ class TeamsCreatorTest {
 
     @Test
     void createTeams_noRandomSeed_throwException() {
-        List<TeamPage> teamPages = List.of(new TeamPage("/no_random_seed.html", 777));
+        List<TeamPage> teamPages = List.of(new TeamPage("/no_random_seed.html", 777, 4));
         TournamentPlayCards tournamentPlayCards = new TournamentPlayCards(teamPages);
 
         assertThrows(NoRandomSeedException.class, () -> teamsCreator.createTeams(tournamentPlayCards));

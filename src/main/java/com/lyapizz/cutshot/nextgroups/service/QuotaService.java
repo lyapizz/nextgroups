@@ -1,7 +1,10 @@
 package com.lyapizz.cutshot.nextgroups.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,18 +19,19 @@ public class QuotaService {
 
     private final Pattern pattern = Pattern.compile(".*КВОТА: (\\d+).*");
 
-    public List<Integer> findQuotes(Document doc) {
-        List<Integer> quotes = new ArrayList<>();
+    public Map<Integer, Integer> findQuotes(Document doc) {
+       Map<Integer, Integer> quoteMap = new HashMap<>();
+       int keyIndex = 0;
         for (Element quotesSpan : doc.getElementsByClass(QUOTES_CLASS_NAME)) {
             String quotesSpanText = quotesSpan.text();
 
             Matcher matcher = pattern.matcher(quotesSpanText);
             if (matcher.matches()) {
-                quotes.add(Integer.parseInt(matcher.group(1)));
+                quoteMap.put(keyIndex++, Integer.parseInt(matcher.group(1)));
             }
 
         }
-        return quotes;
+        return quoteMap;
     }
 
 }

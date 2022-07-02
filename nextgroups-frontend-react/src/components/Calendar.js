@@ -26,7 +26,7 @@ class Calendar extends Component {
     render() {
         return (
             <div>
-                <h3 className="mb-3">Saint-Petersburg Beach Volley Tour 2021</h3>
+                <h3 className="mb-3">Saint-Petersburg Beach Volley Tour 2022</h3>
                 {this.state.calenderResponse.tournaments
                     .filter((tournament) => {
                         let arrayOfStrings = tournament.date.split('-');

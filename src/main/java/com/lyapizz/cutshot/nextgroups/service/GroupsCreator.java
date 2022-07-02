@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import com.lyapizz.cutshot.nextgroups.model.Format;
 import com.lyapizz.cutshot.nextgroups.model.Group;
 import com.lyapizz.cutshot.nextgroups.model.Team;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,11 +15,20 @@ public class GroupsCreator {
 
     public List<Group> createGroups(List<Team> teams, Format format) {
         Format nonNullFormat = format != null ? format : Format.W_SINGLE_4;
+        if(nonNullFormat == Format.W_SINGLE_6){
+            throw new IllegalStateException("Format W_SINGLE_6 is not supported yet!");
+        }
 
         int numberOfGroups = (int) Math.ceil(1.0 * teams.size() / nonNullFormat.getTeamsInGroup());
 
-        //1: sort by rating
-        teams.sort(Comparator.comparingInt(team -> -team.getCommonRating()));
+        //1: sort by rating then by level then by random seed
+        Comparator<Team> ratingComparator = Comparator.comparingInt(team -> -team.getCommonRating());
+        Comparator<Team> levelComparator = Comparator.comparingInt(team -> -team.getLevel());
+        Comparator<Team> randomSeedComparator = Comparator.comparingInt(team -> -team.getRandomSeed());
+
+        teams.sort(levelComparator
+                .thenComparing(ratingComparator)
+                .thenComparing(randomSeedComparator));
         //2: find half with maximum rating
         List<Team> topTeams = teams.stream()
                 .limit(numberOfGroups * 2)
@@ -28,11 +36,10 @@ public class GroupsCreator {
         //3: add them to groups
         List<Group> groups = initGroups(topTeams);
         //4: fill groups by random groups by seed
-        List<Team> loserTeams = teams.stream()
+        List<Team> losersTeams = teams.stream()
                 .skip(numberOfGroups * 2)
-                .sorted(Comparator.comparingInt(team -> -team.getRandomSeed()))
                 .collect(Collectors.toList());
-        return extendByRandomTeams(groups, loserTeams);
+        return extendByOtherTeams(groups, losersTeams);
     }
 
     private List<Group> initGroups(List<Team> topTeams) {
@@ -50,18 +57,17 @@ public class GroupsCreator {
         return result;
     }
 
-    private List<Group> extendByRandomTeams(List<Group> groups, List<Team> loserTeams) {
-        int numberToAdd = loserTeams.size()/groups.size();
-        int curNumberToAdd = numberToAdd;
+    private List<Group> extendByOtherTeams(List<Group> groups, List<Team> losersTeams) {
+        int i = 0;
+        int j = losersTeams.size() - 1;
         int curGroupIndex = 0;
-        for(Team loserTeam : loserTeams){
-            if(curNumberToAdd == 0){
-                curGroupIndex++;
-                curNumberToAdd = numberToAdd;
-            }
-            List<Team> curGroupTeams = groups.get(curGroupIndex).getTeams();
-            curGroupTeams.add(curGroupTeams.size() - 1, loserTeam);
-            curNumberToAdd--;
+        while (i < j) {
+            Group curGroup = groups.get(curGroupIndex);
+            curGroup.getTeams().add(losersTeams.get(i));
+            curGroup.getTeams().add(losersTeams.get(j));
+            i++;
+            j--;
+            curGroupIndex++;
         }
         return groups;
     }

@@ -9,6 +9,7 @@ public class Team {
     String player2;
     Integer commonRating;
     Integer randomSeed;
+    Integer level;
     String teamPage;
 
     @Override

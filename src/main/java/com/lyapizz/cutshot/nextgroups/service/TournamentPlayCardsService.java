@@ -23,7 +23,7 @@ public class TournamentPlayCardsService {
                 String rawTeamLink = teamElement.attr("onclick");
                 Matcher matcher = pattern.matcher(rawTeamLink);
                 if (matcher.matches()) {
-                    playCardList.add(new TeamPage(matcher.group(1), getCommonRating(teamElement)));
+                    playCardList.add(new TeamPage(matcher.group(1), getCommonRating(teamElement), getTeamLevel(teamElement)));
                 }
             }
         }
@@ -32,6 +32,10 @@ public class TournamentPlayCardsService {
 
     private int getCommonRating(Element teamElement) {
         return Integer.parseInt(teamElement.child(teamElement.childrenSize()-2).text());
+    }
+
+    private int getTeamLevel(Element teamElement) {
+        return Integer.parseInt(teamElement.child(teamElement.childrenSize()-3).text());
     }
 
     private boolean isApproved(Element teamElement) {

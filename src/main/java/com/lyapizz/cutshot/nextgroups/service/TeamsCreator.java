@@ -30,7 +30,6 @@ public class TeamsCreator {
     public List<Team> createTeams(TournamentPlayCards tournamentPlayCards) {
         List<Team> result = Collections.synchronizedList(new ArrayList<>());
         long startTime = System.currentTimeMillis();
-        //todo think about parallelism
         tournamentPlayCards.getTeamsPages().parallelStream().forEach(teamPage -> createTeam(result, teamPage));
 
         log.info("Team creation took {} ms", System.currentTimeMillis() - startTime);
@@ -51,13 +50,7 @@ public class TeamsCreator {
         Document document = documentReader.read(teamPage.getUrl());
         List<String> players = findPlayers(document);
         Integer randomSeed = findRandomSeed(document);
-
-        if(randomSeed == null){
-            log.error("Team creation is not possible, because random seed is not defined!");
-            throw new NoRandomSeedException();
-        }
-
-        return new Team(players.get(0), players.get(1), teamPage.getCommonRating(), randomSeed, teamPage.getUrl());
+        return new Team(players.get(0), players.get(1), teamPage.getCommonRating(), randomSeed, teamPage.getLevel(), teamPage.getUrl());
     }
 
 
@@ -79,7 +72,7 @@ public class TeamsCreator {
                 return Integer.parseInt(matcher.group(1));
             }
         }
-        return null;
+        return 0;
     }
 
 }

@@ -31,6 +31,7 @@ public class TournamentPlayCards {
     public static class TeamPage {
         String url;
         Integer commonRating;
+        Integer level;
     }
 
 }
