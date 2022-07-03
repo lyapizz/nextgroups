@@ -2,12 +2,10 @@ package com.lyapizz.cutshot.nextgroups.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.lyapizz.cutshot.nextgroups.NoRandomSeedException;
 import com.lyapizz.cutshot.nextgroups.model.Team;
 import com.lyapizz.cutshot.nextgroups.model.TournamentPlayCards;
 import com.lyapizz.cutshot.nextgroups.model.TournamentPlayCards.TeamPage;
@@ -28,41 +26,32 @@ public class TeamsCreator {
     private final Pattern SEED_PATTERN = Pattern.compile(".*Номер жеребъевки: (\\d+).*");
 
     public List<Team> createTeams(TournamentPlayCards tournamentPlayCards) {
-        List<Team> result = Collections.synchronizedList(new ArrayList<>());
+        List<Team> result = new ArrayList<>();
         long startTime = System.currentTimeMillis();
-        tournamentPlayCards.getTeamsPages().parallelStream().forEach(teamPage -> createTeam(result, teamPage));
+        boolean isRandomSeedNeeded = tournamentPlayCards.randomSeedIsNeeded();
+        tournamentPlayCards.getTeamsPages().parallelStream().forEach(teamPage -> createTeam(result, teamPage, isRandomSeedNeeded));
 
         log.info("Team creation took {} ms", System.currentTimeMillis() - startTime);
 
         return result;
     }
 
-    private void createTeam(List<Team> result, TeamPage teamPage) {
+    private void createTeam(List<Team> result, TeamPage teamPage, boolean isRandomSeedNeeded) {
         try {
-            Team team = extractTeam(teamPage);
+            Team team = extractTeam(teamPage, isRandomSeedNeeded);
             result.add(team);
         } catch (IOException exception) {
             log.error("Error during creation of team: {}", teamPage, exception);
         }
     }
 
-    private Team extractTeam(TeamPage teamPage) throws IOException {
-        Document document = documentReader.read(teamPage.getUrl());
-        List<String> players = findPlayers(document);
-        Integer randomSeed = findRandomSeed(document);
-        return new Team(players.get(0), players.get(1), teamPage.getCommonRating(), randomSeed, teamPage.getLevel(), teamPage.getUrl());
-    }
-
-
-    private List<String> findPlayers(Document document) {
-        List<String> players = new ArrayList<>();
-        for (Element playerElement : document.getElementsByClass("team_player_name")) {
-            players.add(playerElement.text());
+    private Team extractTeam(TeamPage teamPage, boolean isRandomSeedNeeded) throws IOException {
+        Integer randomSeed = 0;
+        if(isRandomSeedNeeded) {
+            Document document = documentReader.read(teamPage.getUrl());
+            randomSeed = findRandomSeed(document);
         }
-        if (players.size() == 1) {
-            players.add("unknown");
-        }
-        return players;
+        return new Team(teamPage.getPlayer1(), teamPage.getPlayer2(), teamPage.getCommonRating(), randomSeed, teamPage.getLevel(), teamPage.getUrl());
     }
 
     private Integer findRandomSeed(Document document) {

@@ -1,12 +1,10 @@
 package com.lyapizz.cutshot.nextgroups.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lyapizz.cutshot.nextgroups.NoRandomSeedException;
 import com.lyapizz.cutshot.nextgroups.model.Team;
 import com.lyapizz.cutshot.nextgroups.model.TournamentPlayCards;
 import com.lyapizz.cutshot.nextgroups.model.TournamentPlayCards.TeamPage;
@@ -27,7 +25,7 @@ class TeamsCreatorTest {
 
     @Test
     void createTeams_oneTeam_twoPlayers() {
-        List<TeamPage> teamPages = List.of(new TeamPage("/lepekhin-golosov.html", 675, 4));
+        List<TeamPage> teamPages = List.of(new TeamPage("/lepekhin-golosov.html", "Лепехин Павел", "Голосов Михаил", 675, 4));
         TournamentPlayCards tournamentPlayCards = new TournamentPlayCards(teamPages);
 
         List<Team> teamList = teamsCreator.createTeams(tournamentPlayCards);
@@ -44,7 +42,7 @@ class TeamsCreatorTest {
     void createTeams_manyTeams_parallelStreamWorks() {
         List<TeamPage> teamPages = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
-            teamPages.add(new TeamPage("/lepekhin-golosov.html", 675, 4));
+            teamPages.add(new TeamPage("/lepekhin-golosov.html", "Лепехин Павел", "Голосов Михаил", 675, 4));
         }
         TournamentPlayCards tournamentPlayCards = new TournamentPlayCards(teamPages);
 
@@ -55,7 +53,7 @@ class TeamsCreatorTest {
 
     @Test
     void createTeams_oneTeam_SecondPlayerIsNull() {
-        List<TeamPage> teamPages = List.of(new TeamPage("/berezovskij.html", 105, 4));
+        List<TeamPage> teamPages = List.of(new TeamPage("/berezovskij.html", "Березовский Дмитрий", "unknown", 105, 4));
         TournamentPlayCards tournamentPlayCards = new TournamentPlayCards(teamPages);
 
         List<Team> teamList = teamsCreator.createTeams(tournamentPlayCards);
@@ -68,11 +66,4 @@ class TeamsCreatorTest {
         assertEquals(1166, team.getRandomSeed());
     }
 
-    @Test
-    void createTeams_noRandomSeed_throwException() {
-        List<TeamPage> teamPages = List.of(new TeamPage("/no_random_seed.html", 777, 4));
-        TournamentPlayCards tournamentPlayCards = new TournamentPlayCards(teamPages);
-
-        assertThrows(NoRandomSeedException.class, () -> teamsCreator.createTeams(tournamentPlayCards));
-    }
 }

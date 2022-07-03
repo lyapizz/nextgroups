@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.lyapizz.cutshot.nextgroups.NoRandomSeedException;
 import com.lyapizz.cutshot.nextgroups.model.Format;
 import com.lyapizz.cutshot.nextgroups.model.Group;
 import com.lyapizz.cutshot.nextgroups.model.GroupResult;
@@ -68,7 +67,7 @@ public class NextGroupsService {
                     String category = categoryMap.get(tournamentEntry.getKey());
 
                     GroupResult groupResult = processOneTournament(format, quota, category, tournamentEntry);
-                    if(groupResult != null) {
+                    if (groupResult != null) {
                         result.add(groupResult);
                     }
                 });
@@ -78,9 +77,9 @@ public class NextGroupsService {
     private Map<Integer, Element> createTournamentMap(Document doc) {
         Map<Integer, Element> tournamentMap = new HashMap<>();
         Elements tornamentElements = doc.getElementsByClass(TOURNAMENT_PLAYERS_TABLE_CLASS_NAME);
-        for(int i=0; i< tornamentElements.size(); i++){
+        for (int i = 0; i < tornamentElements.size(); i++) {
             Element tournament = tornamentElements.get(i);
-            if(isPlannedTournament(tournament)){
+            if (isPlannedTournament(tournament)) {
                 tournamentMap.put(i, tournament);
             }
         }
@@ -94,7 +93,6 @@ public class NextGroupsService {
         }
         TournamentPlayCards playCards = tournamentPlayCardsService.extract(tournamentEntry.getValue());
         if (playCards.quotaIsReached(quota)) {
-            try {
                 List<Team> allTeams = teamsCreator.createTeams(playCards);
                 LOG.info("Teams were created!");
                 List<Group> groups = groupsCreator.createGroups(allTeams, format);
@@ -103,9 +101,6 @@ public class NextGroupsService {
                     LOG.info(group.toString());
                 }
                 return new GroupResult(category, groups, null);
-            } catch (NoRandomSeedException ex) {
-                return new GroupResult(category, emptyList(), RANDOM_SEED_IS_NOT_DEFINED.getMessage());
-            }
         } else {
             return new GroupResult(category, emptyList(), QUOTA_IS_NOT_REACHED.getMessage());
         }
