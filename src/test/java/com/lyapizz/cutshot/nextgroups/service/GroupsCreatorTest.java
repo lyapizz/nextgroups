@@ -119,7 +119,6 @@ class GroupsCreatorTest {
         assertEquals(1000, groups.get(0).getTeams().get(3).getCommonRating());
 
         assertEquals(3, groups.get(0).getTeams().get(3).getLevel());
-
     }
 
     private List<Team> createTeams(int size) {
